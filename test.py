@@ -3,4 +3,5 @@
 #et les conflit
 
 print("Hello World !")
+print("traduction : Bonjour tout le Monde !")
 print("python c'est trop bien")
