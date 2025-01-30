@@ -107,15 +107,15 @@ class App:
                        self.bullet[name]['y'], 
                        size, size, 7)
 
-        # Draw reload bar at bottom left
-        bar_width = int((self.player["reload"] / 100) * 100)  # Scale to 100 pixels max
+        # Draw reload bar 
+        bar_width = int((self.player["reload"] / 100) * 100)  #100 pixels max
         if self.player["reload"]<10:
-            pyxel.rect(10, 500, bar_width, 5, 8)# red
+            pyxel.rect(10, 500, bar_width, 5, 8)#red
         elif self.player["reload"]<100:
             pyxel.rect(10, 500, bar_width, 5, 7)#white
         else:
-            pyxel.rect(10, 500, bar_width, 5, 11)#vert
-        # Draw reload bar outline
-        pyxel.rectb(10, 500, 100, 5, 1)  # Black border
+            pyxel.rect(10, 500, bar_width, 5, 11)#green
+        
+        pyxel.rectb(10, 500, 100, 5, 1)  
 
 App()
