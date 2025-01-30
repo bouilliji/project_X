@@ -66,7 +66,7 @@ class App:
         self.shoot_player()
 
         # Move bullets
-        for name in list(self.bullet.keys()):  # Avoid modification errors during iteration
+        for name in list(self.bullet.keys()): 
             self.bullet[name]['x'] += self.bullet[name]['direction'][0]
             self.bullet[name]['y'] += self.bullet[name]['direction'][1]
 
