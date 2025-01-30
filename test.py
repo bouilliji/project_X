@@ -1,3 +1,4 @@
+import pyxel
 from time import time
 from math import sqrt
 
