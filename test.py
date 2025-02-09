@@ -10,7 +10,7 @@ pixel_l -> pixel launcher
 pixel_IA -> pixel intelligent
 """
 
-level = 0
+
 
 class App:
     def __init__(self):
@@ -59,7 +59,7 @@ class App:
     def update(self):
         global level
         if len(list(self.enemy.keys())) == 0:
-            level += 1
+            self.player['level'] += 1
             #x,y,size,hp,damage
             if self.player['level'] == 1:
                 self.enemy_spawn(500, 499, 20, 100, 10)
