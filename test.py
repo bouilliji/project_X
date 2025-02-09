@@ -17,7 +17,7 @@ class App:
         pyxel.init(512, 512)
         self.enemy = {}  
         self.bullet = {}  
-        self.player = {'x': 50, 'y': 50, 'size': 32, "reload": 100, "hp": 100, "weapon": "pixel_l"}
+        self.player = {'x': 50, 'y': 50, 'size': 32, "reload": 100, "hp": 100, "weapon": "pixel_l", "level":0}
         self.last_direction = [1, 0]  # left direction
         
         self.enemy_spawn(500, 250, 20, 100, 10)
@@ -61,21 +61,21 @@ class App:
         if len(list(self.enemy.keys())) == 0:
             level += 1
             #x,y,size,hp,damage
-            if level == 1:
+            if self.player['level'] == 1:
                 self.enemy_spawn(500, 499, 20, 100, 10)
                 sleep(0.01)
                 self.enemy_spawn(500, 1, 20, 100, 10)
-            if level == 2:
+            if self.player['level'] == 2:
                 self.enemy_spawn(500, 250, 40, 400, 40)
                 sleep(0.01)
-            if level == 3:
+            if self.player['level'] == 3:
                 self.enemy_spawn(500, 250, 2, 200, 10)
                 sleep(0.01)
-            if level == 4:
+            if self.player['level'] == 4:
                 for i in range(6):
                     self.enemy_spawn(500,i*100 +1, 20, 100, 10)
                     sleep(0.01)
-            if level == 5:
+            if self.player['level'] == 5:
                 self.enemy_spawn(1, 1, 32, 100, 10)
                 sleep(0.01)
                 self.enemy_spawn(1, 500, 32, 100, 10)
@@ -83,18 +83,18 @@ class App:
                 self.enemy_spawn(500, 500, 32, 100, 10)
                 sleep(0.01)
                 self.enemy_spawn(500, 1, 32, 100, 10)
-            if level == 6:
+            if self.player['level'] == 6:
                 self.enemy_spawn(500, 250, 1000, 1000, 100)
-            if level == 7:
+            if self.player['level'] == 7:
                 for i in range(3):
                     for j in range(3):
                         if j !=1 or i != 1:
                             self.enemy_spawn(250*i, 250*j, 32, 100, 10)
                             sleep(0.01)
-            if level == 8:
+            if self.player['level'] == 8:
                 self.enemy_spawn(500, 250, 1, 200, 100)
                 
-            if level == 9:
+            if self.player['level'] == 9:
                 self.enemy_spawn(600, 250, 2000, 10000, 999)
                 
         
