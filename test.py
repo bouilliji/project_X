@@ -1,4 +1,5 @@
 import pyxel
+
 from time import time, sleep
 from math import sqrt, sin, cos
 from random import random
@@ -9,8 +10,6 @@ weapon:
 pixel_l -> pixel launcher
 pixel_IA -> pixel intelligent
 """
-
-
 
 class App:
     def __init__(self):
