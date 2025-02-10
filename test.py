@@ -56,7 +56,6 @@ class App:
             
 #_____________________________tick_______________________________________
     def update(self):
-        global level
         if len(list(self.enemy.keys())) == 0:
             self.player['level'] += 1
             #x,y,size,hp,damage
@@ -150,11 +149,22 @@ class App:
 
 #________________________enemy tick________________________
         for name in self.enemy.keys():
+            block = False
             vec_x = (self.player['x'] + self.player['size'] / 2) - self.enemy[name]['x']
             vec_y = (self.player['y'] + self.player['size'] / 2) - self.enemy[name]['y']
             norm = sqrt(vec_x ** 2 + vec_y ** 2)
 
-            if norm < self.enemy[name]['radius'] + self.player['size'] / 2:
+            for otherName in self.enemy.keys():
+                if name != otherName :
+                    enemyX = self.enemy[name]['x'] + int(round(vec_x / norm)) * 2
+                    enemyY = self.enemy[name]['y'] + int(round(vec_y / norm)) * 2
+                    distEnemy = sqrt( (self.enemy[otherName]['x'] - enemyX)**2 + (self.enemy[otherName]['y'] - enemyY)**2 )
+                    if distEnemy < 0:
+                        block = True
+                        continue
+            if block:
+                continue
+            elif norm < self.enemy[name]['radius'] + self.player['size'] / 2:
                 self.enemy[name]['x'] -= int(round(vec_x / norm)) * 3
                 self.enemy[name]['y'] -= int(round(vec_y / norm)) * 3
                 self.player['x'] += int(round(vec_x / norm)) * 3  # Collision reaction
@@ -168,7 +178,7 @@ class App:
 #________________________draw________________________
     def draw(self):
         """Draws all game elements on the screen."""
-        pyxel.cls(0) 
+        pyxel.cls(0)
         if self.player["hp"] > 0:
             # Draw player
             pyxel.rect(self.player['x'], self.player['y'], self.player['size'], self.player['size'], 7)
