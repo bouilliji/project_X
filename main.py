@@ -6,7 +6,7 @@ from random import random
 # init global variable
 enemy = {}
 bullet = {}
-player = {'x': 50, 'y': 50, 'size': 16, "reload": 100, "hp": 100, "weapon": "pixel_l", "level": 0}
+player = {'x': 50, 'y': 50, 'size': 16, "reload": 100, "hp": 100, "main_weapon": "pixel_l", "inventory": ["pixel_l" , "cloner"], "level": 0}
 last_direction = [1, 0]  # left direction
 screen_size = [256,256]
 
@@ -152,11 +152,11 @@ def update():
 
     #containe player on windows border
     player['x'] = max(0, min(player['x'], screen_size[0] - player['size']))
-    player['y'] = max(0, min(player['y'], screen_size[1] - player['size']))
+    player['y'] = max(28, min(player['y'], screen_size[1] - player['size']))
 
     #reload +
     if player["reload"] < 100:
-        player["reload"] += 1
+        player["reload"] += 100
     #hp +
     if 0 < player["hp"] < 100:
         player["hp"] += 0.1
@@ -174,10 +174,13 @@ def draw():
     """Draws all game elements on the screen."""
     pyxel.cls(0)
 
-    #background pictur
-    pyxel.blt(0,0,0,0,0,256,256)
+    weapons = ["pixel_l", "cloner"]
     
     if player["hp"] > 0:
+        
+        #background pictur
+        pyxel.blt(0,0,0,0,0,256,256)
+
         # Draw player
         pyxel.rect(player['x'], player['y'], player['size'], player['size'], 7)
 
@@ -197,8 +200,8 @@ def draw():
         elif player["reload"] < 100:
             pyxel.rect(10, 245, bar_width, 5, 7)  
         else:
-            pyxel.rect(10, 245, bar_width, 5, 11) 
-        pyxel.rectb(10, 245, 100, 5, 1)  
+            pyxel.rect(10, 245, bar_width, 5, 6) 
+        pyxel.rectb(10, 245, 100, 5, 9)
 
         # Draw reload bar for player's HP
         bar_width = int((player["hp"] / 100) * 100)
@@ -207,11 +210,16 @@ def draw():
         elif player["hp"] < 100:
             pyxel.rect(10, 250, bar_width, 5, 7)  
         else:
-            pyxel.rect(10, 250, bar_width, 5, 11)  
-        pyxel.rectb(10, 250, 100, 5, 1) 
+            pyxel.rect(10, 250, bar_width, 5, 6)  
+        pyxel.rectb(10, 250, 100, 5, 9)
 
         #display current level
-        pyxel.text(125, 10, f'''level {player["level"]}''', 7)
+        #pyxel.text(125, 10, f'''level {player["level"]}''', 7)  enumerate(weapons)
+
+        for i in range(10):
+            #if weapon in player["inventory"]:
+            pyxel.blt(0,0,1,0,0,256,256)
+
 
     else:
         xs = cos(time() * 10) * 10
@@ -223,8 +231,10 @@ def draw():
 # Initialisation de Pyxel
 pyxel.init(screen_size[0], screen_size[1])
 
-#load backgroud pictur
+#load backgroud picture
+
 pyxel.load("room.pyxres")
+pyxel.image(1).load(0,0,"icon.pyxres")
 
 # Lancement du jeu
 pyxel.run(update, draw)
