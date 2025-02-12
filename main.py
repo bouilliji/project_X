@@ -6,9 +6,9 @@ from random import random
 # init global variable
 enemy = {}
 bullet = {}
-player = {'x': 50, 'y': 50, 'size': 32, "reload": 100, "hp": 100, "weapon": "pixel_l", "level": 0}
+player = {'x': 50, 'y': 50, 'size': 16, "reload": 100, "hp": 100, "weapon": "pixel_l", "level": 0}
 last_direction = [1, 0]  # left direction
-screen_size = [512,512]
+screen_size = [256,256]
 
 def enemy_spawn(x, y, radius, hp, damage):
     global enemy
@@ -31,7 +31,7 @@ def shoot_player():
     global player
     """Shoots a projectile in the last recorded direction if the space bar is pressed."""
     if player["reload"] >= 10 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
-        size = sqrt(player["reload"])  # bullet size
+        size = sqrt(player["reload"]) / 2  # bullet size
         vx, vy = last_direction  # use the last direction of the player
 
         bullet_x = player['x'] + player['size'] / 2 - size
@@ -109,33 +109,33 @@ def update():
     if len(list(enemy.keys())) == 0:
         #x, y, radius, hp, damage
         if player['level'] == 0:
-            enemy_spawn(500, 250, 20, 100, 10)
+            enemy_spawn(500, 250, 10, 100, 10)
         elif player['level'] == 1:
-            enemy_spawn(500, 499, 20, 100, 10)
-            enemy_spawn(500, 1, 20, 100, 10)
+            enemy_spawn(500, 499, 10, 100, 10)
+            enemy_spawn(500, 1, 10, 100, 10)
         elif player['level'] == 2:
-            enemy_spawn(500, 250, 40, 400, 40)
+            enemy_spawn(500, 250, 20, 400, 40)
         elif player['level'] == 3:
             enemy_spawn(500, 250, 2, 200, 10)
         elif player['level'] == 4:
             for i in range(6):
-                enemy_spawn(500,i*100 +1, 20, 100, 10)
+                enemy_spawn(500,i*100 +1, 10, 100, 10)
         elif player['level'] == 5:
-            enemy_spawn(1, 1, 32, 100, 10)
-            enemy_spawn(1, 500, 32, 100, 10)
-            enemy_spawn(500, 500, 32, 100, 10)
-            enemy_spawn(500, 1, 32, 100, 10)
+            enemy_spawn(1, 1, 16, 100, 10)
+            enemy_spawn(1, 500, 16, 100, 10)
+            enemy_spawn(500, 500, 16, 100, 10)
+            enemy_spawn(500, 1, 16, 100, 10)
         elif player['level'] == 6:
-            enemy_spawn(500, 250, 50, 500, 100)
+            enemy_spawn(500, 250, 25, 500, 100)
         elif player['level'] == 7:
             for i in range(3):
                 for j in range(3):
                     if j !=1 or i != 1:
-                        enemy_spawn(250*i, 250*j, 32, 100, 10)
+                        enemy_spawn(250*i, 250*j, 16, 100, 10)
         elif player['level'] == 8:
             enemy_spawn(500, 250, 1, 200, 100)
         elif player['level'] == 9:
-            enemy_spawn(600, 250, 20, 10000, 999)
+            enemy_spawn(600, 250, 10, 10000, 999)
         player['level'] += 1
 
     #player direction
@@ -173,6 +173,10 @@ def update():
 def draw():
     """Draws all game elements on the screen."""
     pyxel.cls(0)
+
+    #background pictur
+    pyxel.blt(0,0,0,0,0,256,256)
+    
     if player["hp"] > 0:
         # Draw player
         pyxel.rect(player['x'], player['y'], player['size'], player['size'], 7)
@@ -189,25 +193,26 @@ def draw():
         # Draw reload bar for reload
         bar_width = int((player["reload"] / 100) * 100)  
         if player["reload"] < 10:
-            pyxel.rect(10, 490, bar_width, 5, 8)  
+            pyxel.rect(10, 245, bar_width, 5, 8)  
         elif player["reload"] < 100:
-            pyxel.rect(10, 490, bar_width, 5, 7)  
+            pyxel.rect(10, 245, bar_width, 5, 7)  
         else:
-            pyxel.rect(10, 490, bar_width, 5, 11) 
-        pyxel.rectb(10, 490, 100, 5, 1)  
+            pyxel.rect(10, 245, bar_width, 5, 11) 
+        pyxel.rectb(10, 245, 100, 5, 1)  
 
         # Draw reload bar for player's HP
         bar_width = int((player["hp"] / 100) * 100)
         if player["hp"] < 10:
-            pyxel.rect(10, 500, bar_width, 5, 8) 
+            pyxel.rect(10, 250, bar_width, 5, 8) 
         elif player["hp"] < 100:
-            pyxel.rect(10, 500, bar_width, 5, 7)  
+            pyxel.rect(10, 250, bar_width, 5, 7)  
         else:
-            pyxel.rect(10, 500, bar_width, 5, 11)  
-        pyxel.rectb(10, 500, 100, 5, 1) 
+            pyxel.rect(10, 250, bar_width, 5, 11)  
+        pyxel.rectb(10, 250, 100, 5, 1) 
 
         #display current level
-        pyxel.text(200, 50, f'level {player['level']}', 7)
+        pyxel.text(125, 10, f'''level {player["level"]}''', 7)
+
     else:
         xs = cos(time() * 10) * 10
         ys = sin(time() * 10) * 10
@@ -217,6 +222,9 @@ def draw():
 
 # Initialisation de Pyxel
 pyxel.init(screen_size[0], screen_size[1])
+
+#load backgroud pictur
+pyxel.load("room.pyxres")
 
 # Lancement du jeu
 pyxel.run(update, draw)
