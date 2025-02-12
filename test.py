@@ -6,7 +6,7 @@ from random import random
 #------------------>comment
 #==================================================
 
-#weapon:duplicator; pixel_l
+#weapon:duplicator; pixel_l;Bit_Ray;Code-trapper
 
 
 #==================================================
@@ -14,7 +14,7 @@ from random import random
 #==================================================
 enemy = {}
 bullet = {}
-player = {'x': 50, 'y': 50, 'size': 32, "reload": 100, "hp": 100, "weapon": "duplicator", "level": 1}
+player = {'x': 50, 'y': 50, 'size': 64, "reload": 100, "hp": 100, "weapon": "Code_trapper", "level": 1}
 last_direction = [1, 0]  # left direction
 screen_size = [512,512]
 
@@ -44,8 +44,11 @@ def shoot_player():
         pixel_l(player)
     elif player["weapon"] == "duplicator":
         duplicator(player)
-        
-    
+    elif player["weapon"] == "Bit_Ray":
+        Bit_Ray(player)
+    elif player["weapon"] == "Code_trapper":
+        Code_trapper(player)
+
 def pixel_l(player):
     
     if player["reload"] >= 20 and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
@@ -78,7 +81,69 @@ def duplicator(player):
         bullet_spawn(bullet_x, bullet_y, 32, [vx * 5, vy * 5], damage)
         player["reload"] = 0
     if player["reload"] < 100:
-        player["reload"] += 5
+        player["reload"] += 3
+
+
+def Bit_Ray(player):
+
+    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+        player["mouse"] = 1
+    elif pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT):
+        player["mouse"] = 0
+            
+    if player["reload"] >= 1 and player["mouse"] == 1:  
+        
+        dx =pyxel.mouse_x-player['x'] - player['size'] / 2 
+        dy =pyxel.mouse_y-player['y'] - player['size'] / 2 
+        angle = atan2(dy, dx)
+        vx=cos(angle)
+        vy=sin(angle)
+        size = 2
+        damage = 1
+        
+        for i in range(1):
+            bullet_x = player['x'] + (player['size']*random())
+            bullet_y = player['y'] + (player['size']*random())
+            bullet_spawn(bullet_x, bullet_y, 2, [vx * 20, vy *20], damage)
+        player["reload"] -= 1
+    elif player["reload"] < 100:
+        player["reload"] += 1
+
+
+
+def Code_trapper(player):
+    if player["reload"] >= 50 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
+        size = 4
+        damage = 4
+        
+        for i in range((player["size"]//8)+1):
+            bullet_x = player['x'] + i*8 - size/2 
+            bullet_y = player['y'] + player['size'] - size/2
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+        for i in range((player["size"]//8)+1):
+            bullet_x = player['x'] + i*8 - size/2 
+            bullet_y = player['y'] - size/2
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+        for i in range((player["size"]//8)-1):
+            bullet_x = player['x'] - size/2 
+            bullet_y = player['y'] - size/2 + (i+1)*8
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+        for i in range((player["size"]//8)-1):
+            bullet_x = player['x'] - size/2 + player['size']
+            bullet_y = player['y'] - size/2 + (i+1)*8
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+        
+        damage = player['size'] / 2
+        size = player['size'] / 2
+        bullet_x = player['x'] + player['size'] / 2 - size/2
+        bullet_y = player['y'] + player['size'] / 2 - size/2
+        bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+
+        
+        
+        player["reload"] -= 50
+    if player["reload"] < 100:
+        player["reload"] += 0.5
 #________________________enemy tick________________________
 def update_enemy():
     global enemy, player
@@ -216,7 +281,7 @@ def draw():
     """Draws all game elements on the screen."""
     pyxel.cls(0)
     
-    if (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)): #mouse
+    if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): #mouse
         pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
     else:
         pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 10)
