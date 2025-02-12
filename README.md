@@ -1,7 +1,6 @@
 ## project_X
 le jeu ...
 
-Weapon : www.pyxelstudio.net/studio/j45asw
 
 quentin : https://www.pyxelstudio.net/studio/mlxgeu
 Inspiration :
