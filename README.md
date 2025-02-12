@@ -1,7 +1,7 @@
 ## project_X
 le jeu ...
 
-quentin : https://www.pyxelstudio.net/studio/mlxgeu
+quentin : [https://www.pyxelstudio.net/studio/emdcv6](https://www.pyxelstudio.net/studio/emdcv6)
 Inspiration :
 - The Légende of Zelda 1
 - Sonic Frontièrs
