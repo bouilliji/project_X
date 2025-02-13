@@ -7,7 +7,7 @@ from random import random
 #------------------>comment
 #==================================================
 
-#weapon:duplicator; pixel_l;Bit_Ray;Code-trapper
+#weapon:duplicator; pixel_l;Bit_Ray;Code_trapper
 
 
 
@@ -112,27 +112,26 @@ def Bit_Ray(player):
 def Code_trapper(player):
     if player["reload"] >= 50 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
         size = 4
-        damage = 4
-        print("je suis la")
+        damage = 5
 
-        for i in range(player["size"]+1):
+        for i in range((player["size"]//8)+1):
             bullet_x = player['x'] + i*8 - size/2 
             bullet_y = player['y'] + player['size'] - size/2
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
-        for i in range(player["size"]+1):
+        for i in range((player["size"]//8)+1):
             bullet_x = player['x'] + i*8 - size/2 
             bullet_y = player['y'] - size/2
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
-        for i in range(player["size"]-1):
+        for i in range((player["size"]//8)-1):
             bullet_x = player['x'] - size/2 
             bullet_y = player['y'] - size/2 + (i+1)*8
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
-        for i in range(player["size"]-1):
+        for i in range((player["size"]//8)-1):
             bullet_x = player['x'] - size/2 + player['size']
             bullet_y = player['y'] - size/2 + (i+1)*8
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         
-        damage = player['size'] / 2
+        damage = 10
         size = player['size'] / 2
         bullet_x = player['x'] + player['size'] / 2 - size/2
         bullet_y = player['y'] + player['size'] / 2 - size/2
