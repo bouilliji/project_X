@@ -266,10 +266,6 @@ def update():
     #hp +
     if 0 < player["hp"] < 100:
         player["hp"] += 0.1
-    if 50 > player["hp"]:
-        player["hp"] += 50
-
-    #abandoned function
     shoot_player()
 
     update_bullet()
@@ -290,9 +286,9 @@ def draw():
     if player["hp"] > 0:
         
         #background pictur
-        pyxel.load("room.pyxres")
+        pyxel.load(r"room\room[3,0].pyxres")
         pyxel.blt(0,0,0,0,0,256,256)
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT): #mouse
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
             pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
         else:
             pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 10)
