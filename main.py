@@ -14,12 +14,20 @@ from random import random
 #==================================================
 #------------------>data
 #==================================================
+
+
 enemy = {}
 bullet = {}
-player = {'x': 50, 'y': 50, 'size': 16, "reload": 100, "hp": 100, "main_weapon": "duplicator", "inventory": ["pixel_l" , "duplicator","Bit_Ray","Code_trapper"], "level": 0}
+player = {'x': 0, 'y': 0, 'size': 16, "reload": 100, "hp": 100, 'totalHP' : 100, "main_weapon": "pixel_l", "inventory": ["pixel_l"], "level": 0}
 last_direction = [1, 0]  # left direction
 screen_size = [256,256]
+scene = "menu"
+dialogueBox = 1
 
+
+pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
+bitRay = {'damage' : 1, 'reloadTime' : 2}
+codeTraper = {'damage' : 5, 'reloadTime' : 50}
 
 
 #==================================================
@@ -39,7 +47,7 @@ def bullet_spawn(x, y, size, direction, damage):
 
 def direction_axe():
     """return variation on x and y axes"""
-    return (pyxel.btn(pyxel.KEY_D) - pyxel.btn(pyxel.KEY_Q), pyxel.btn(pyxel.KEY_S) - pyxel.btn(pyxel.KEY_Z))
+    return (pyxel.btn(pyxel.KEY_Q) - pyxel.btn(pyxel.KEY_D), pyxel.btn(pyxel.KEY_Z) - pyxel.btn(pyxel.KEY_S))
 
 #________________________weapon________________________
 def shoot_player():
@@ -56,17 +64,17 @@ def pixel_l(player):
     
     if player["reload"] >= 20 and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
         size = 8  # bullet size
-        dx =pyxel.mouse_x-player['x'] - player['size'] / 2 
-        dy =pyxel.mouse_y-player['y'] - player['size'] / 2 
+        dx =pyxel.mouse_x-123 - player['size'] / 2 
+        dy =pyxel.mouse_y-123 - player['size'] / 2 
         angle = atan2(dy, dx)
         vx=cos(angle)
         vy=sin(angle)
 
-        bullet_x = player['x'] + player['size'] / 2 
-        bullet_y = player['y'] + player['size'] / 2 
+        bullet_x = 123 + player['size'] / 2 
+        bullet_y = 123 + player['size'] / 2 
 
-        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5],20)
-        player["reload"] -= 20  
+        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5],pixelLuncher['damage'])
+        player["reload"] -= pixelLuncher['reloadTime']  
     
     if player["reload"] < 100:
         player["reload"] += 1
@@ -78,8 +86,8 @@ def duplicator(player):
         damage = (player["reload"]/100)*player['hp']
         vx, vy = last_direction  # use the last direction of the player
             
-        bullet_x = player['x'] + player['size'] / 2 - size/2
-        bullet_y = player['y'] + player['size'] / 2 - size/2
+        bullet_x = 123 + player['size'] / 2 - size/2
+        bullet_y = 123 + player['size'] / 2 - size/2
 
         bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5], damage)
         player["reload"] = 0
@@ -91,19 +99,18 @@ def Bit_Ray(player):
    
     if player["reload"] >= 1 and pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) == 1:  
         
-        dx =pyxel.mouse_x-player['x'] - player['size'] / 2 
-        dy =pyxel.mouse_y-player['y'] - player['size'] / 2 
+        dx =pyxel.mouse_x-123 - player['size'] / 2 
+        dy =pyxel.mouse_y-123 - player['size'] / 2 
         angle = atan2(dy, dx)
         vx=cos(angle)
         vy=sin(angle)
         size = 2
-        damage = 2
         
         for i in range(1):
-            bullet_x = player['x'] + (player['size']*random())
-            bullet_y = player['y'] + (player['size']*random())
-            bullet_spawn(bullet_x, bullet_y, 2, [vx * 20, vy *20], damage)
-        player["reload"] -= 2
+            bullet_x = 123 + (player['size']*random())
+            bullet_y = 123 + (player['size']*random())
+            bullet_spawn(bullet_x, bullet_y, 2, [vx * 20, vy *20], bitRay['damage'])
+        player["reload"] -= bitRay['reloadTime']
     elif player["reload"] < 100:
         player["reload"] += 1
 
@@ -112,40 +119,39 @@ def Bit_Ray(player):
 def Code_trapper(player):
     if player["reload"] >= 50 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
         size = 4
-        damage = 5
+        damage = codeTraper['damage']
 
         for i in range((player["size"]//8)+1):
-            bullet_x = player['x'] + i*8 - size/2 
-            bullet_y = player['y'] + player['size'] - size/2
+            bullet_x = 123 + i*8 - size/2 
+            bullet_y = 123 + player['size'] - size/2
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)+1):
-            bullet_x = player['x'] + i*8 - size/2 
-            bullet_y = player['y'] - size/2
+            bullet_x = 123 + i*8 - size/2 
+            bullet_y = 123 - size/2
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)-1):
-            bullet_x = player['x'] - size/2 
-            bullet_y = player['y'] - size/2 + (i+1)*8
+            bullet_x = 123 - size/2 
+            bullet_y = 123 - size/2 + (i+1)*8
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)-1):
-            bullet_x = player['x'] - size/2 + player['size']
-            bullet_y = player['y'] - size/2 + (i+1)*8
+            bullet_x = 123 - size/2 + player['size']
+            bullet_y = 123 - size/2 + (i+1)*8
             bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         
-        damage = 10
         size = player['size'] / 2
-        bullet_x = player['x'] + player['size'] / 2 - size/2
-        bullet_y = player['y'] + player['size'] / 2 - size/2
-        bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
+        bullet_x = 123 + player['size'] / 2 - size/2
+        bullet_y = 123 + player['size'] / 2 - size/2
+        bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage*2)
 
         
         
-        player["reload"] -= 50
+        player["reload"] -= codeTraper['reloadTime']
     if player["reload"] < 100:
         player["reload"] += 0.5
 
 #________________________enemy update________________________
 def update_enemy():
-    global enemy, player
+    global enemy, player, dialogueBox
     for name in enemy.keys():
 
         #hitbox with other enemy
@@ -163,8 +169,8 @@ def update_enemy():
                         enemy[otherName]['y'] += dy / dist_to_other
 
         #calcul values vector
-        vec_x = (player['x'] + player['size'] / 2) - enemy[name]['x']
-        vec_y = (player['y'] + player['size'] / 2) - enemy[name]['y']
+        vec_x = (123 + player['size'] / 2) - enemy[name]['x']
+        vec_y = (123 + player['size'] / 2) - enemy[name]['y']
         norm = sqrt(vec_x ** 2 + vec_y ** 2)
         
 
@@ -172,20 +178,24 @@ def update_enemy():
         if norm < enemy[name]['radius'] + player['size'] / 2:
             enemy[name]['x'] -= int(round(vec_x / norm))  * 3
             enemy[name]['y'] -= int(round(vec_y / norm)) * 3
-            player['x'] += int(round(vec_x / norm)) * 3  # Collision reaction
-            player['y'] += int(round(vec_y / norm)) * 3
+            player['x'] -= int(round(vec_x / norm)) * 3  # Collision reaction
+            player['y'] -= int(round(vec_y / norm)) * 3
             player['hp'] -= enemy[name]['damage']
         #normal action
         elif norm > 0:
-            enemy[name]['x'] += int(round(vec_x / norm)) * 2
-            enemy[name]['y'] += int(round(vec_y / norm)) * 2
+            enemy[name]['x'] += int(round(vec_x / norm)) * 2 + direction_axe()[0] *3
+            enemy[name]['y'] += int(round(vec_y / norm)) * 2 + direction_axe()[1] *3
+        
+        if enemy[name]['x'] > 255 + enemy[name]['radius'] + 10 or enemy[name]['y'] > 255 + enemy[name]['radius'] + 10 or enemy[name]['y'] < 0 - enemy[name]['radius'] - 10 or enemy[name]['x'] < 0 - enemy[name]['radius'] - 10:
+            enemy[name]['x'] += int(round(vec_x / norm))
+            enemy[name]['y'] += int(round(vec_y / norm))
 
 #________________________bullet update________________________
 def update_bullet():
     global bullet, enemy, screen_size
     for bulletName in list(bullet.keys()):
-        bullet[bulletName]['x'] += bullet[bulletName]['direction'][0]
-        bullet[bulletName]['y'] += bullet[bulletName]['direction'][1]
+        bullet[bulletName]['x'] += bullet[bulletName]['direction'][0] + direction_axe()[0] *3
+        bullet[bulletName]['y'] += bullet[bulletName]['direction'][1] + direction_axe()[1] *3
 
         # delete bullet outside the screen
         if not (0 <= bullet[bulletName]['x'] <= screen_size[0] and 0 <= bullet[bulletName]['y'] <= screen_size[1]):
@@ -205,72 +215,172 @@ def update_bullet():
 
                 break  
 
+#boite de dialogue
+def dialogue(title, text, icon = None, aspects = None):
+    pyxel.rect(60,60,134,137,3)
+    pyxel.rectb(60,60,134,137,0)
+    pyxel.text(127-(len(title)//2)*4, 65, title, 7)
+
+    x = 65
+    y = 75
+
+    if icon != None:
+        pyxel.blt(117,75,0,icon[0],icon[1],20,20)
+        y = 100
+    
+    text = text.split(" ")
+
+    for mot in text:
+        if x + len(mot) > 170:
+            x = 65
+            y += 8
+        pyxel.text(x,y,mot,7)
+        x += 4*len(mot) + 3
+        
+    x = 65
+    y += 16
+    if aspects != None:
+        pyxel.text(x,y,"aspect : ",7)
+        for aspect in aspects.keys():
+            pyxel.text(x,y,f"{aspect} : {aspects[aspect]}",7)
+            y += 8
+
+    pyxel.text(127-(len("presser entre pour fermer")//2)*4,180,"presser entré pour fermer",7)
+
 
 #==================================================
 #------------------>update
 #==================================================
 def update():
-    global player, enemy, bullet, last_direction, screen_size
+    global player, enemy, bullet, last_direction, screen_size, scene, dialogueBox, pixelLuncher, codeTraper, bitRay
 
-    if len(list(enemy.keys())) == 0:
-        #x, y, radius, hp, damage
-        if player['level'] == 0:
-            enemy_spawn(500, 250, 10, 100, 10)
-        elif player['level'] == 1:
-            enemy_spawn(500, 499, 10, 100, 10)
-            enemy_spawn(500, 1, 10, 100, 10)
-        elif player['level'] == 2:
-            enemy_spawn(500, 250, 20, 400, 40)
-        elif player['level'] == 3:
-            enemy_spawn(500, 250, 2, 200, 10)
-        elif player['level'] == 4:
-            for i in range(6):
-                enemy_spawn(500,i*100 +1, 10, 100, 10)
-        elif player['level'] == 5:
-            enemy_spawn(1, 1, 16, 100, 10)
-            enemy_spawn(1, 500, 16, 100, 10)
-            enemy_spawn(500, 500, 16, 100, 10)
-            enemy_spawn(500, 1, 16, 100, 10)
-        elif player['level'] == 6:
-            enemy_spawn(500, 250, 25, 500, 100)
-        elif player['level'] == 7:
-            for i in range(3):
-                for j in range(3):
-                    if j !=1 or i != 1:
-                        enemy_spawn(250*i, 250*j, 16, 100, 10)
-        elif player['level'] == 8:
-            enemy_spawn(500, 250, 1, 200, 100)
-        elif player['level'] == 9:
-            enemy_spawn(600, 250, 10, 10000, 999)
-        player['level'] += 1
-
-    #player direction
-    move_x,move_y = direction_axe()
+    if dialogueBox != 0:
+        if pyxel.btnp(pyxel.KEY_RETURN):
+            dialogueBox = 0
     
-    newIndex = int(player["inventory"].index(player["main_weapon"]) + int(pyxel.mouse_wheel))
-    if newIndex < 0:
-        newIndex = len(player["inventory"])-1
-    elif newIndex > len(player["inventory"])-1:
-        newIndex = 0
+    elif scene == "menu":
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            if 100 < pyxel.mouse_x < 160 and 100< pyxel.mouse_y < 120:
+                enemy = {}
+                bullet = {}
+                player['hp'] = 100
+                player['level'] = 0
+                player['inventory'] = ['pixel_l']
+    
+                pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
+                bitRay = {'damage' : 1, 'reloadTime' : 2}
+                codeTraper = {'damage' : 5, 'reloadTime' : 50}
+                scene = "room"
+                dialogueBox = 2
+            
+            elif 100 < pyxel.mouse_x < 160 and 145< pyxel.mouse_y < 160:
+                pyxel.quit()
 
-    player["main_weapon"] = player["inventory"][newIndex]
+    elif scene == "room":
+        if len(list(enemy.keys())) == 0:
+            #x, y, radius, hp, damage
+            if player['level'] == 0:
+                enemy_spawn(500, 250, 10, 100, 10)
+            elif player['level'] == 1:
+                dialogueBox = 3
+                pixelLuncher['damage'] = 10
+                enemy_spawn(500, 499, 10, 100, 10)
+                enemy_spawn(500, 1, 10, 100, 10)
+            elif player['level'] == 2:
+                dialogueBox = 3
+                pixelLuncher['reloadTime'] = 10
+                enemy_spawn(500, 250, 20, 400, 40)
+            elif player['level'] == 3:
+                dialogueBox = 3
+                pixelLuncher['damage'] = 20
+                enemy_spawn(500, 250, 2, 200, 10)
+            elif player['level'] == 4:
+                dialogueBox = 3
+                pixelLuncher['reloadTime'] = 5
+                for i in range(6):
+                    enemy_spawn(500,i*100 +1, 10, 100, 10)
+            elif player['level'] == 5:
+                enemy_spawn(1, 1, 16, 100, 10)
+                enemy_spawn(1, 500, 16, 100, 10)
+                enemy_spawn(500, 500, 16, 100, 10)
+                enemy_spawn(500, 1, 16, 100, 10)
+            elif player['level'] == 6:
+                enemy_spawn(500, 250, 25, 500, 100)
+            elif player['level'] == 7:
+                for i in range(3):
+                    for j in range(3):
+                        if j !=1 or i != 1:
+                            enemy_spawn(250*i, 250*j, 16, 100, 10)
+            elif player['level'] == 8:
+                enemy_spawn(500, 250, 1, 200, 100)
+            elif player['level'] == 9:
+                enemy_spawn(600, 250, 10, 10000, 999)
+            player['level'] += 1
 
-    #player  move
-    player['x'] += move_x * 3
-    player['y'] += move_y * 3
+        #player direction
+        move_x,move_y = direction_axe()
+        if move_x != 0 or move_y != 0:
+            last_direction = [-move_x,-move_y]
+        
+        newIndex = int(player["inventory"].index(player["main_weapon"]) + int(pyxel.mouse_wheel))
+        if newIndex < 0:
+            newIndex = len(player["inventory"])-1
+        elif newIndex > len(player["inventory"])-1:
+            newIndex = 0
 
-    #containe player on windows border
-    player['x'] = max(0, min(player['x'], screen_size[0] - player['size']))
-    player['y'] = max(28, min(player['y'], screen_size[1] - player['size']))
+        player["main_weapon"] = player["inventory"][newIndex]
 
-    #hp +
-    if 0 < player["hp"] < 100:
-        player["hp"] += 0.1
-    shoot_player()
+        #player  move
+        player['x'] += move_x * 3
+        player['y'] += move_y * 3
 
-    update_bullet()
+        if player["x"] < 0:
+            player["x"] = 255
+        player["x"] %= 256
 
-    update_enemy()
+        if player["y"] < 0:
+            player["y"] = 255
+        player["y"] %= 256
+            
+        #hp +
+        if 0 < player["hp"] < 100:
+            player["hp"] += 0.1
+        """if player["hp"] < 50:
+            player["hp"] += 50"""
+
+        
+
+        shoot_player()
+
+        update_bullet()
+
+        update_enemy()
+
+        if player["hp"] <= 0:
+            scene = "game_over"
+            pyxel.image(2).load(0 , 0 ,r".\game_over.png")
+    
+    elif scene == "game_over":
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            if 90 < pyxel.mouse_x < 160 and 80< pyxel.mouse_y < 100:
+                enemy = {}
+                bullet = {}
+                player['hp'] = 100
+                player['level'] = 0
+                player['inventory'] = ['pixel_l']
+    
+                pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
+                bitRay = {'damage' : 1, 'reloadTime' : 2}
+                codeTraper = {'damage' : 5, 'reloadTime' : 50}
+                scene = "room"
+                dialogueBox = 2
+
+            elif 50 < pyxel.mouse_x < 210 and 125< pyxel.mouse_y < 145:
+                scene = "menu"
+                pyxel.image(2).load(0 , 0 ,r".\menu.png")
+            elif 100 < pyxel.mouse_x < 165 and 170 < pyxel.mouse_y < 190:
+                pyxel.quit()
+
     
 
 #==================================================
@@ -282,18 +392,19 @@ def draw():
 
     weapons = ["pixel_l", "duplicator","Bit_Ray","Code_trapper",0]
     
-    
-    if player["hp"] > 0:
+    if scene == "menu":
+        pyxel.blt(0,0,2,0,0,256,256)
+
+
+    elif player["hp"] > 0 and scene == "room":
         
-        #background pictur
-        pyxel.load(r"room\room[3,0].pyxres")
-        pyxel.blt(0,0,0,0,0,256,256)
-        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
-            pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
-        else:
-            pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 10)
+        #background picture
+        for x in range(3):
+            for y in range(3):
+                pyxel.blt((player["x"] + (x * 256) - 256),(player["y"] + (y* 256) - 256),1,0,0,256,256)
+        
         # Draw player
-        pyxel.rect(player['x'], player['y'], player['size'], player['size'], 7)
+        pyxel.rect(123, 123, player['size'], player['size'], 7)
 
         
         # Draw enemy
@@ -315,7 +426,7 @@ def draw():
         pyxel.rectb(10, 245, 100, 5, 9)
 
         # Draw reload bar for player's HP
-        bar_width = int((player["hp"] / 100) * 100)
+        bar_width = int((player["hp"] / player['totalHP']) * 100)
         if player["hp"] < 10:
             pyxel.rect(10, 250, bar_width, 5, 8) 
         elif player["hp"] < 100:
@@ -328,30 +439,38 @@ def draw():
         pyxel.text(114, 30, f'''level {player["level"]}''', 7)
 
 
-        pyxel.load("icon.pyxres")
         for i, weapon in enumerate(weapons):
             if weapon == player["main_weapon"]:
                 pyxel.rectb(145+22*i, 233, 22, 22, 1)
             if weapon in player["inventory"]:
                 pyxel.blt(146+22*i,234,0,20*i,0,20,20)
             else:
-                pyxel.blt(146+22*i,234,0,40,20,20,20)
+                pyxel.blt(146+22*i,234,0,100,0,20,20)
 
 
+    elif scene == "game_over":
+        pyxel.blt(0,0,2,0,0,256,256)
+    
+    if dialogueBox == 1:
+        dialogue("project x", "vous etes un resitant carré qui se bat contre les envaisseurs cercles. au fur de votre aventure voud débloquerais des armes et armure. utiliser ZQSD pour ce déplacer")
+    if dialogueBox == 2:
+        dialogue("Nouveau", "vous avez deploquer le lance pixel. Apuyer sur le clique gauche de la souris pour tirrer", [0,0], pixelLuncher)
+    if dialogueBox == 3:
+        dialogue("Evolution", "votre lance pixel a evolue", [0,0], pixelLuncher)
+    
+    if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
+        pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
     else:
-        xs = cos(time() * 10) * 10
-        ys = sin(time() * 10) * 10
-        for i in range(11):
-            for j in range(11):
-                pyxel.text(i * 50 + xs, j * 50 + ys, 'GAME OVER', 8)
+        pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 10)
 
 # Initialisation de Pyxel
 pyxel.init(screen_size[0], screen_size[1])
 
-#load backgroud picture
+#load all image
+pyxel.load(r".\resource.pyxres")
+pyxel.image(1).load(0 , 0 ,r".\room.png")
+pyxel.image(2).load(0 , 0 ,r".\menu.png")
 
-
-pyxel.load("icon.pyxres")
 
 # Lancement du jeu
 pyxel.run(update, draw)
