@@ -1,6 +1,7 @@
 ## project_X
 le jeu ...
 
+
 quentin : https://www.pyxelstudio.net/studio/mlxgeu
 Inspiration :
 - The Légende of Zelda 1
@@ -43,5 +44,3 @@ Les Cercles, bien qu'ayant réussi à maintenir leur pouvoir, se retrouvent conf
 Zylar, âgé maintenant de 38 ans, est devenu un maître tacticien, connu pour ses incursions audacieuses et sa capacité à échafauder des plans complexes. Cependant, il reste hanté par la perte de sa famille et par le souvenir de la chute de sa ville natale. Son objectif ultime est de redonner à son peuple la liberté et l'indépendance qu'il a perdues, mais les cercles sont partout, dans les rues, dans les esprits et dans les structures de pouvoir. Sa lutte devient plus personnelle chaque jour, au fur et à mesure qu'il doit naviguer dans un monde où la frontière entre le bien et le mal devient de plus en plus floue.
 
 Le joueur incarnera Zylar Carron, en quête de vengeance et de liberté pour son peuple. Il devra rallier les factions rebelles, infiltrer les cités circulaires et déjouer les manœuvres de l'Empire des Cercles tout en affrontant ses propres démons intérieurs. Le jeu se déroulera dans un monde richement détaillé où chaque choix influencera le destin de la résistance et l'avenir de la Nation Carrée.
-
-https://zestedesavoir.com/tutoriels/2835/theorie-des-collisions/collisions-en-2d/
