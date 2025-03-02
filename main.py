@@ -33,7 +33,6 @@ codeTraper = {'damage' : 5, 'reloadTime' : 50}
 #==================================================
 #------------------>function
 #==================================================
-<<<<<<< HEAD
 def enemy_spawn(x, y, radius, hp, damage):
     global enemy, player
     if player['level'] == 9:
@@ -45,20 +44,11 @@ def enemy_spawn(x, y, radius, hp, damage):
         """Spawns an enemy at a given position with certain radius and health points."""
         enemy[f"enemy{time()}"] = {'x': x, 'y': y, 'radius': radius, "hp": hp, "damage": damage}
         sleep(0.01)
-=======
-def enemy_spawn(x, y, radius, hp, damage, weapon):
-    global enemy
-    """Spawns an enemy at a given position with certain radius and health points."""
-    enemy[f"enemy{time()}"] = {'x': x, 'y': y, 'radius': radius, "hp": hp, "damage": damage, 'weapon' : weapon}
-    if weapon == 'range':
-        enemy[list(enemy.keys())[-1]]['reload'] = 20
-    sleep(0.01)
->>>>>>> de8363e5fe4ec4b5cf53a3f478ef673e6c16a33f
 
-def bullet_spawn(x, y, size, direction, damage, playerDamage):
+def bullet_spawn(x, y, size, direction, damage):
     global bullet
     """Spawns a projectile with a certain size and direction."""
-    bullet[f"bullet{time()}"] = {'x': x, 'y': y, 'size': size, 'direction': direction, "damage": damage , 'playerDamage': playerDamage}
+    bullet[f"bullet{time()}"] = {'x': x, 'y': y, 'size': size, 'direction': direction, "damage": damage}
     sleep(0.01)
 
 def direction_axe():
@@ -67,15 +57,16 @@ def direction_axe():
 
 #________________________weapon________________________
 def shoot_player():
-    """if player["main_weapon"] == "pixel_l":
+    if player["main_weapon"] == "pixel_l":
         pixel_l(player)
     elif player["main_weapon"] == "duplicator":
         duplicator(player)
     elif player["main_weapon"] == "Bit_Ray":
         Bit_Ray(player)
     elif player["main_weapon"] == "Code_trapper":
-        Code_trapper(player)"""
-    glitch_impact(player)
+        Code_trapper(player)
+    elif player["main_weapon"] == "glitch_impact":
+        glitch_impact(player)
 
 
 def pixel_l(player):
@@ -91,7 +82,7 @@ def pixel_l(player):
         bullet_x = 123 + player['size'] / 2 
         bullet_y = 123 + player['size'] / 2 
 
-        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5],pixelLuncher['damage'] , False)
+        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5],pixelLuncher['damage'])
         player["reload"] -= pixelLuncher['reloadTime']  
     
     if player["reload"] < 100:
@@ -126,7 +117,7 @@ def duplicator(player):
         bullet_x = 123 + player['size'] / 2 - size/2
         bullet_y = 123 + player['size'] / 2 - size/2
 
-        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5], damage, False)
+        bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5], damage)
         player["reload"] = 0
     if player["reload"] < 100:
         player["reload"] += 1
@@ -146,7 +137,7 @@ def Bit_Ray(player):
         for i in range(1):
             bullet_x = 123 + (player['size']*random())
             bullet_y = 123 + (player['size']*random())
-            bullet_spawn(bullet_x, bullet_y, 2, [vx * 20, vy *20], bitRay['damage'], False)
+            bullet_spawn(bullet_x, bullet_y, 2, [vx * 20, vy *20], bitRay['damage'])
         player["reload"] -= bitRay['reloadTime']
     elif player["reload"] < 100:
         player["reload"] += 1
@@ -161,24 +152,24 @@ def Code_trapper(player):
         for i in range((player["size"]//8)+1):
             bullet_x = 123 + i*8 - size/2 
             bullet_y = 123 + player['size'] - size/2
-            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage, False)
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)+1):
             bullet_x = 123 + i*8 - size/2 
             bullet_y = 123 - size/2
-            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage, False)
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)-1):
             bullet_x = 123 - size/2 
             bullet_y = 123 - size/2 + (i+1)*8
-            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage, False)
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         for i in range((player["size"]//8)-1):
             bullet_x = 123 - size/2 + player['size']
             bullet_y = 123 - size/2 + (i+1)*8
-            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage, False)
+            bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage)
         
         size = player['size'] / 2
         bullet_x = 123 + player['size'] / 2 - size/2
         bullet_y = 123 + player['size'] / 2 - size/2
-        bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage*2, False)
+        bullet_spawn(bullet_x, bullet_y, size, [0, 0], damage*2)
 
         
         
@@ -216,39 +207,26 @@ def update_enemy():
         vec_y = (123 + player['size'] / 2) - enemy[name]['y']
         norm = sqrt(vec_x ** 2 + vec_y ** 2)
         
-        if enemy[name]['weapon'] == 'melee':
-            #colition with player
-            if norm < enemy[name]['radius'] + player['size'] / 2:
-                enemy[name]['x'] -= int(round(vec_x / norm))  * 3
-                enemy[name]['y'] -= int(round(vec_y / norm)) * 3
-                player['x'] -= int(round(vec_x / norm)) * 3  # Collision reaction
-                player['y'] -= int(round(vec_y / norm)) * 3
-                player['hp'] -= enemy[name]['damage']
-            #normal action
-            elif norm > 0:
-                enemy[name]['x'] += int(round(vec_x / norm)) * 2 + direction_axe()[0] *3
-                enemy[name]['y'] += int(round(vec_y / norm)) * 2 + direction_axe()[1] *3
-            
-        elif enemy[name]['weapon'] == 'range':
-            if norm < 100:
-                if enemy[name]['reload'] >= 20:
-                    bullet_spawn(enemy[name]['x'], enemy[name]['y'], 8, [ int(round(vec_x / norm))*5 , int(round(vec_y / norm))*5 ], enemy[name]['damage'], True)
-                    enemy[name]['reload'] -= 20
-            else:
-                enemy[name]['x'] += int(round(vec_x / norm)) * 2 + direction_axe()[0] *3
-                enemy[name]['y'] += int(round(vec_y / norm)) * 2 + direction_axe()[1] *3
-            
-            if enemy[name]['reload'] < 20:
-                enemy[name]['reload'] += 1
+
+        #colition with player
+        if norm < enemy[name]['radius'] + player['size'] / 2:
+            enemy[name]['x'] -= int(round(vec_x / norm))  * 3
+            enemy[name]['y'] -= int(round(vec_y / norm)) * 3
+            player['x'] -= int(round(vec_x / norm)) * 3  # Collision reaction
+            player['y'] -= int(round(vec_y / norm)) * 3
+            player['hp'] -= enemy[name]['damage']
+        #normal action
+        elif norm > 0:
+            enemy[name]['x'] += int(round(vec_x / norm)) * 2 + direction_axe()[0] *3
+            enemy[name]['y'] += int(round(vec_y / norm)) * 2 + direction_axe()[1] *3
         
         if enemy[name]['x'] > 255 + enemy[name]['radius'] + 10 or enemy[name]['y'] > 255 + enemy[name]['radius'] + 10 or enemy[name]['y'] < 0 - enemy[name]['radius'] - 10 or enemy[name]['x'] < 0 - enemy[name]['radius'] - 10:
-                enemy[name]['x'] += int(round(vec_x / norm))
-                enemy[name]['y'] += int(round(vec_y / norm))
-
+            enemy[name]['x'] += int(round(vec_x / norm))
+            enemy[name]['y'] += int(round(vec_y / norm))
 
 #________________________bullet update________________________
 def update_bullet():
-    global bullet, enemy, screen_size, player
+    global bullet, enemy, screen_size
     for bulletName in list(bullet.keys()):
         bullet[bulletName]['x'] += bullet[bulletName]['direction'][0] + direction_axe()[0] *3
         bullet[bulletName]['y'] += bullet[bulletName]['direction'][1] + direction_axe()[1] *3
@@ -257,26 +235,19 @@ def update_bullet():
         if not (0 <= bullet[bulletName]['x'] <= screen_size[0] and 0 <= bullet[bulletName]['y'] <= screen_size[1]):
             del bullet[bulletName]
             continue  
-        
-        if bullet[bulletName]['playerDamage'] == False:
-            for enemyName in list(enemy.keys()):
-                distance = sqrt((enemy[enemyName]['x'] - bullet[bulletName]['x']) ** 2 + (enemy[enemyName]['y'] - bullet[bulletName]['y']) ** 2)
 
-                if distance < enemy[enemyName]["radius"] + bullet[bulletName]["size"]+2:
-                    enemy[enemyName]["hp"] -= bullet[bulletName]["damage"]
+        for enemyName in list(enemy.keys()):
+            distance = sqrt((enemy[enemyName]['x'] - bullet[bulletName]['x']) ** 2 + (enemy[enemyName]['y'] - bullet[bulletName]['y']) ** 2)
 
-                    del bullet[bulletName]
+            if distance < enemy[enemyName]["radius"] + bullet[bulletName]["size"]+2 :
+                enemy[enemyName]["hp"] -= bullet[bulletName]["damage"]
 
-                    if enemy[enemyName]["hp"] <= 0:
-                        del enemy[enemyName]
+                del bullet[bulletName]
 
-                    break
-        elif bullet[bulletName]['playerDamage'] == True:
-            distance = sqrt((127 - bullet[bulletName]['x']) ** 2 + (127 - bullet[bulletName]['y']) ** 2)
-            if distance < player["size"]//2 + bullet[bulletName]["size"]+2:
-                    player["hp"] -= bullet[bulletName]["damage"]
+                if enemy[enemyName]["hp"] <= 0:
+                    del enemy[enemyName]
 
-                    del bullet[bulletName]
+                break  
 
 #boite de dialogue
 def dialogue(title, text, icon = None, aspects = None):
@@ -343,7 +314,6 @@ def update():
         if len(list(enemy.keys())) == 0:
             #x, y, radius, hp, damage
             if player['level'] == 0:
-<<<<<<< HEAD
                 dialogueBox = 0
                 pixelLuncher = {'damage' : 10, 'reloadTime' : 30}
                 
@@ -365,31 +335,14 @@ def update():
                 codeTraper = {'damage' : 6, 'reloadTime' : 40}
                 
                 enemy_spawn(500, 250, 2, 200, 10)
-=======
-                enemy_spawn(500, 250, 10, 100, 10, 'melee')
-            elif player['level'] == 1:
-                dialogueBox = 3
-                pixelLuncher['damage'] = 10
-                enemy_spawn(500, 499, 10, 100, 10, 'melee')
-                enemy_spawn(500, 1, 10, 100, 10, 'range')
-            elif player['level'] == 2:
-                dialogueBox = 3
-                pixelLuncher['reloadTime'] = 10
-                enemy_spawn(500, 250, 20, 400, 40, 'melee')
-            elif player['level'] == 3:
-                dialogueBox = 3
-                pixelLuncher['damage'] = 20
-                enemy_spawn(500, 250, 2, 200, 10, 'melee')
->>>>>>> de8363e5fe4ec4b5cf53a3f478ef673e6c16a33f
             elif player['level'] == 4:
                 dialogue("Nouveau", "vous avez debloquer le bitRay, presse la souris pour l'active")
                 player['inventory'].append("bitRay ")
                 bitRay = {'damage' : 1, 'reloadTime' : 2}
                 
                 for i in range(6):
-                    enemy_spawn(500,i*100 +1, 10, 100, 10, 'melee')
+                    enemy_spawn(500,i*100 +1, 10, 100, 10)
             elif player['level'] == 5:
-<<<<<<< HEAD
                 dialogue("Evolution", "votre lance pixel a evolue")
                 pixelLuncher = {'damage' : 10, 'reloadTime' : 10}
 
@@ -403,21 +356,12 @@ def update():
 
 
                 enemy_spawn(500, 250, 25, 500, 100)
-=======
-                enemy_spawn(1, 1, 16, 100, 10, 'melee')
-                enemy_spawn(1, 500, 16, 100, 10, 'melee')
-                enemy_spawn(500, 500, 16, 100, 10, 'melee')
-                enemy_spawn(500, 1, 16, 100, 10, 'melee')
-            elif player['level'] == 6:
-                enemy_spawn(500, 250, 25, 500, 100, 'melee')
->>>>>>> de8363e5fe4ec4b5cf53a3f478ef673e6c16a33f
             elif player['level'] == 7:
                 dialogue("Evolution", "votre bit_ray a evolue")
                 bitRay = {'damage' : 2, 'reloadTime' : 2}
                 for i in range(3):
                     for j in range(3):
                         if j !=1 or i != 1:
-<<<<<<< HEAD
                             enemy_spawn(250*i, 250*j, 16, 100, 10)
             
             elif player['level'] == 8:
@@ -439,13 +383,6 @@ def update():
                 dialogue("???", "Le roi des cercles arrive")
                 enemy_spawn(500, 500, 50, 999, 999)
 
-=======
-                            enemy_spawn(250*i, 250*j, 16, 100, 10, 'melee')
-            elif player['level'] == 8:
-                enemy_spawn(500, 250, 1, 200, 100, 'melee')
-            elif player['level'] == 9:
-                enemy_spawn(600, 250, 10, 10000, 999, 'melee')
->>>>>>> de8363e5fe4ec4b5cf53a3f478ef673e6c16a33f
             player['level'] += 1
 
         #player direction
