@@ -64,7 +64,7 @@ def shoot_player():
         duplicator(player)
     elif player["main_weapon"] == "Bit_Ray":
         Bit_Ray(player)
-    elif player["main_weapon"] == "Code_trapper":
+    elif player["main_weapon"] == "code_trapper":
         Code_trapper(player)
     elif player["main_weapon"] == "glitch_impact":
         glitch_impact(player)
@@ -93,7 +93,7 @@ def pixel_l(player):
 
 
 def glitch_impact(player):
-    if player["reload"] >= glitchImpact['reaodTime'] and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
+    if player["reload"] >= glitchImpact['reloadTime'] and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
         size = 8  # bullet size
         dx =pyxel.mouse_x-123 - player['size'] / 2 
         dy =pyxel.mouse_y-123 - player['size'] / 2 
@@ -105,7 +105,7 @@ def glitch_impact(player):
             vy=sin(angle+r)
 
             bullet_spawn(pyxel.mouse_x, pyxel.mouse_y, 3, [vx * 10, vy * 10], glitchImpact['damage'])
-        player["reload"] -= glitchImpact['reaodTime']  
+        player["reload"] -= glitchImpact['reloadTime']  
     
     if player["reload"] < 100:
         player["reload"] += 1
@@ -320,72 +320,122 @@ def update():
             #x, y, radius, hp, damage
 
             if player['level'] == 0:
-                enemy_spawn(500, 250, 10, 100, 10)
+                enemy_spawn(500, 128, 10, 100, 10)
 
             elif player['level'] == 1:
                 dialogueBox = 3
                 player['inventory'].append("glitch_impact")
-                enemy_spawn(500, 250, 10, 100, 10)
-                enemy_spawn(0, 250, 10, 100, 10)
+
+                enemy_spawn(500, 128, 10, 100, 10)
+                enemy_spawn(-250, 128, 10, 100, 10)
 
             elif player['level'] == 2:
                 dialogueBox = 4
                 pixelLuncher['damage'] = 20
-                enemy_spawn(500, 250, 15, 200, 20)
+
+                enemy_spawn(500, 128, 15, 200, 20)
 
             elif player['level'] == 3:
                 dialogueBox = 5
                 player['inventory'].append("code_trapper")
-                enemy_spawn(500, 250, 10, 100, 10)
-                enemy_spawn(0, 0, 10, 100, 10)
+
+                enemy_spawn(500, 128, 10, 100, 10)
+                enemy_spawn(-250, -250, 10, 100, 10)
                 enemy_spawn(500, 500, 10, 100, 10)
 
             elif player['level'] == 4:
                 dialogueBox = 6
                 glitchImpact['damage'] = 3
-                enemy_spawn(500,250, 20, 300, 35)
+
+                enemy_spawn(500,128, 20, 300, 35)
 
             elif player['level'] == 5:
                 dialogueBox = 4
                 pixelLuncher["damage"] = 30
 
-                enemy_spawn(1, 1, 16, 100, 10)
-                enemy_spawn(1, 500, 16, 100, 10)
+                enemy_spawn(-250, -250, 16, 100, 10)
+                enemy_spawn(-250, 500, 16, 100, 10)
                 enemy_spawn(500, 500, 16, 100, 10)
-                enemy_spawn(500, 1, 16, 100, 10)
+                enemy_spawn(500, -250, 16, 100, 10)
 
             elif player['level'] == 6:
-                dialogue("Evolution", "votre code_trapper a evolue")
-                codeTraper = {'damage' : 6, 'reloadTime' : 25}
+                dialogueBox = 7
+                player['inventory'].append("Bit_Ray")
 
+                enemy_spawn(500, 128, 25, 500, 40)
 
-                enemy_spawn(500, 250, 25, 500, 100)
             elif player['level'] == 7:
-                dialogue("Evolution", "votre bit_ray a evolue")
-                bitRay = {'damage' : 2, 'reloadTime' : 2}
-                for i in range(3):
-                    for j in range(3):
-                        if j !=1 or i != 1:
-                            enemy_spawn(250*i, 250*j, 16, 100, 10)
+                dialogueBox = 4
+                pixelLuncher["damage"] = 25
+                pixelLuncher["reloadTime"] = 15
+                
+                enemy_spawn(-250,-250,10,100,15)
+                enemy_spawn(180,-250,10,100,15)
+                enemy_spawn(500,128,10,100,15)
+                enemy_spawn(180,500,10,100,15)
+                enemy_spawn(-250,500,10,100,15)
             
             elif player['level'] == 8:
-                dialogue("Evolution", "votre lance pixel a evolue")
-                pixelLuncher = {'damage' : 15, 'reloadTime' : 10}
-
-                dialogue("Nouveau", "Vous avez debloquer le duplicator, pressé espace pour l'active")
-                player['inventory'].append("duplicator")
-
-                enemy_spawn(500, 250, 1, 200, 100)
+                dialogueBox = 8
+                codeTraper['damage'] = 5
+                for x in range(5):
+                    for y in range(2):
+                        enemy_spawn(150*x-250,y*750-250,8,50,5)
+                enemy_spawn(-250,128,8,50,5)
             
             elif player['level'] == 9:
-                dialogue("Evolution", "votre code_trapper a evolue")
-                codeTraper = {'damage' : 10, 'reloadTime' : 25}
-                for i in range(50):
-                    enemy_spawn(500, i*10, 1, 10, 10)
-                enemy_spawn(500, 500, 50, 999, 999)
-            elif player['level'] == 9:
-                dialogue("???", "Le roi des cercles arrive")
-                enemy_spawn(500, 500, 50, 999, 999)
+                dialogueBox = 6
+                glitchImpact['damage'] = 5
+
+                for x in range(2):
+                    for y in range(2):
+                        enemy_spawn(x*750-250,y*750-250,8,50,5)
+
+            elif player['level'] == 10:
+                dialogueBox = 9
+                player['inventory'].append("duplicator")
+
+                for x in range(5):
+                    for y in range(2):
+                        enemy_spawn(150*x-250,y*750-250,10,100,7)
+
+            elif player['level'] == 11:
+                dialogueBox = 8
+                codeTraper['damage'] = 10
+
+                enemy_spawn(-250,-250,10,200,15)
+                enemy_spawn(180,-250,10,200,15)
+                enemy_spawn(500,128,10,200,15)
+                enemy_spawn(180,500,10,200,15)
+                enemy_spawn(-250,500,10,200,15)
+            
+            elif player['level'] == 12:
+                dialogueBox = 4
+                pixelLuncher['damage'] = 50
+
+                enemy_spawn(-250,-250,30,1000,70)
+            
+            elif player['level'] == 13:
+                dialogueBox = 10
+                bitRay['damage'] = 8
+
+                for x in range(5):
+                    for y in range(2):
+                        enemy_spawn(150*x-250,y*750-250,10,100,8)
+                enemy_spawn(-250,128,10,100,9)
+
+            elif player['level'] == 14:
+                dialogueBox = 10
+                glitchImpact['damage'] = 10
+
+                for x in range(3):
+                    for y in range(2):
+                        enemy_spawn(250*x-250,y*750-250,15,200,15)
+            
+            elif player['level'] == 15:
+                dialogueBox = 11
+
+                enemy_spawn(500,128,50,3000,80)
 
             player['level'] += 1
 
@@ -525,7 +575,7 @@ def draw():
         pyxel.blt(0,0,2,0,0,256,256)
     
     if dialogueBox == 1:
-        dialogue("project x", "vous etes un resitant carré qui se bat contre les envaisseurs cercles. au fur de votre aventure voud débloquerais des armes et armure. utiliser ZQSD pour ce déplacer")
+        dialogue("project x", "vous etes un resitant carré qui se bat contre les envaisseurs cercles. au fur de votre aventure voud débloquerais des armes et armure. utiliser ZQSD pour ce déplacer. Information : la taille des enemies correspond a ses point de vie.")
     if dialogueBox == 2:
         dialogue("Nouveau", "vous avez deploquer le lance pixel. Appuyer sur le clique gauche de la souris pour tirrer", [0,0], pixelLuncher)
     if dialogueBox == 3:
@@ -544,6 +594,8 @@ def draw():
         dialogue("Nouveau", "Vous avez debloquer le duplicator. Appuyer sur espace pour lancer un clone de vous dans votre direction", [80,0], {"damage":"point de vie", "relaodTime":30})
     if dialogueBox == 10:
         dialogue("Evolution", "Votre bit ray a evoluer", [60,0], bitRay)
+    if dialogueBox == 11:
+        dialogue("Atention", "Le roi des cercle est aparue pour vous terrasser. Il possède 3000 point de vie. faite très atention a vous et bonne chance")
 
     if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
         pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
