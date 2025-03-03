@@ -26,6 +26,7 @@ dialogueBox = 1
 
 
 pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
+glitchImpact = {'damage' : 2, 'reloadTime' : 15}
 bitRay = {'damage' : 1, 'reloadTime' : 2}
 codeTraper = {'damage' : 5, 'reloadTime' : 50}
 
@@ -69,6 +70,8 @@ def shoot_player():
         glitch_impact(player)
 
 
+
+
 def pixel_l(player):
     
     if player["reload"] >= 20 and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
@@ -90,7 +93,7 @@ def pixel_l(player):
 
 
 def glitch_impact(player):
-    if player["reload"] >= 20 and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
+    if player["reload"] >= glitchImpact['reaodTime'] and pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):  # reload time
         size = 8  # bullet size
         dx =pyxel.mouse_x-123 - player['size'] / 2 
         dy =pyxel.mouse_y-123 - player['size'] / 2 
@@ -101,15 +104,15 @@ def glitch_impact(player):
             vx=cos(angle+r)
             vy=sin(angle+r)
 
-            bullet_spawn(pyxel.mouse_x, pyxel.mouse_y, 3, [vx * 10, vy * 10],20)
-        player["reload"] -= 20  
+            bullet_spawn(pyxel.mouse_x, pyxel.mouse_y, 3, [vx * 10, vy * 10], glitchImpact['damage'])
+        player["reload"] -= glitchImpact['reaodTime']  
     
     if player["reload"] < 100:
         player["reload"] += 1
 
 def duplicator(player):
     """Shoots a projectile in the last recorded direction if the space bar is pressed."""
-    if player["reload"] >= 100 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
+    if player["reload"] >= 30 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
         size = player['size'] # bullet size
         damage = (player["reload"]/100)*player['hp']
         vx, vy = last_direction  # use the last direction of the player
@@ -118,14 +121,14 @@ def duplicator(player):
         bullet_y = 123 + player['size'] / 2 - size/2
 
         bullet_spawn(bullet_x, bullet_y, size, [vx * 5, vy * 5], damage)
-        player["reload"] = 0
+        player["reload"] -= 30
     if player["reload"] < 100:
         player["reload"] += 1
 
 
 def Bit_Ray(player):
    
-    if player["reload"] >= 1 and pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) == 1:  
+    if player["reload"] >= bitRay['reloadTime'] and pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) == 1:  
         
         dx =pyxel.mouse_x-123 - player['size'] / 2 
         dy =pyxel.mouse_y-123 - player['size'] / 2 
@@ -145,7 +148,7 @@ def Bit_Ray(player):
 
 
 def Code_trapper(player):
-    if player["reload"] >= 50 and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
+    if player["reload"] >= codeTraper['reloadTime'] and pyxel.btnp(pyxel.KEY_SPACE):  # reload time
         size = 4
         damage = codeTraper['damage']
 
@@ -286,7 +289,7 @@ def dialogue(title, text, icon = None, aspects = None):
 #------------------>update
 #==================================================
 def update():
-    global player, enemy, bullet, last_direction, screen_size, scene, dialogueBox, pixelLuncher, codeTraper, bitRay
+    global player, enemy, bullet, last_direction, screen_size, scene, dialogueBox, pixelLuncher, codeTraper, bitRay, glitchImpact
 
     if dialogueBox != 0:
         if pyxel.btnp(pyxel.KEY_RETURN):
@@ -299,11 +302,13 @@ def update():
                 bullet = {}
                 player['hp'] = 100
                 player['level'] = 0
-                player['inventory'] = ['pixel_l']
+                player['inventory'] = ["pixel_l"]
+                player["main_weapon"] = "pixel_l"
                 
-                pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
-                bitRay = {'damage' : 1, 'reloadTime' : 2}
-                codeTraper = {'damage' : 5, 'reloadTime' : 50}
+                pixelLuncher = {'damage' : 10, 'reloadTime' : 30}
+                glitchImpact = {'damage' : 2, 'reloadTime' : 15}
+                codeTraper = {'damage' : 3, 'reloadTime' : 50}
+                bitRay = {'damage' : 4, 'reloadTime' : 2}
                 scene = "room"
                 dialogueBox = 2
             
@@ -313,43 +318,42 @@ def update():
     elif scene == "room":
         if len(list(enemy.keys())) == 0:
             #x, y, radius, hp, damage
-            if player['level'] == 0:
-                dialogueBox = 0
-                pixelLuncher = {'damage' : 10, 'reloadTime' : 30}
-                
-                enemy_spawn(500, 250, 10, 100, 10)
-            elif player['level'] == 1:
-                dialogue("Nouveau", "Vous avez debloqué le code trapper, appuiyer sur espace pour l'utiliser")
-                codeTraper = {'damage' : 5, 'reloadTime' : 50}
-                player['inventory'].append("Code_trapper")
 
-                enemy_spawn(500, 499, 10, 100, 10)
-                enemy_spawn(500, 1, 10, 100, 10)
+            if player['level'] == 0:
+                enemy_spawn(500, 250, 10, 100, 10)
+
+            elif player['level'] == 1:
+                dialogueBox = 3
+                player['inventory'].append("glitch_impact")
+                enemy_spawn(500, 250, 10, 100, 10)
+                enemy_spawn(0, 250, 10, 100, 10)
+
             elif player['level'] == 2:
-                dialogue("Evolution", "votre lance pixel a evolue")
-                pixelLuncher['reloadTime'] = 20 
-                
-                enemy_spawn(500, 250, 20, 400, 40)
+                dialogueBox = 4
+                pixelLuncher['damage'] = 20
+                enemy_spawn(500, 250, 15, 200, 20)
+
             elif player['level'] == 3:
-                dialogue("Evolution", "votre code trapper a evolue")
-                codeTraper = {'damage' : 6, 'reloadTime' : 40}
-                
-                enemy_spawn(500, 250, 2, 200, 10)
+                dialogueBox = 5
+                player['inventory'].append("code_trapper")
+                enemy_spawn(500, 250, 10, 100, 10)
+                enemy_spawn(0, 0, 10, 100, 10)
+                enemy_spawn(500, 500, 10, 100, 10)
+
             elif player['level'] == 4:
-                dialogue("Nouveau", "vous avez debloquer le bitRay, presse la souris pour l'active")
-                player['inventory'].append("bitRay ")
-                bitRay = {'damage' : 1, 'reloadTime' : 2}
-                
-                for i in range(6):
-                    enemy_spawn(500,i*100 +1, 10, 100, 10)
+                dialogueBox = 6
+                glitchImpact['damage'] = 3
+                enemy_spawn(500,250, 20, 300, 35)
+
             elif player['level'] == 5:
-                dialogue("Evolution", "votre lance pixel a evolue")
-                pixelLuncher = {'damage' : 10, 'reloadTime' : 10}
+                dialogueBox = 4
+                pixelLuncher["damage"] = 30
 
                 enemy_spawn(1, 1, 16, 100, 10)
                 enemy_spawn(1, 500, 16, 100, 10)
                 enemy_spawn(500, 500, 16, 100, 10)
                 enemy_spawn(500, 1, 16, 100, 10)
+
             elif player['level'] == 6:
                 dialogue("Evolution", "votre code_trapper a evolue")
                 codeTraper = {'damage' : 6, 'reloadTime' : 25}
@@ -436,6 +440,7 @@ def update():
                 player['hp'] = 100
                 player['level'] = 0
                 player['inventory'] = ['pixel_l']
+                player["main_weapon"] = "pixel_l"
     
                 pixelLuncher = {'damage' : 5, 'reloadTime' : 20}
                 bitRay = {'damage' : 1, 'reloadTime' : 2}
@@ -458,7 +463,7 @@ def draw():
     """Draws all game elements on the screen."""
     pyxel.cls(0)
 
-    weapons = ["pixel_l", "duplicator","Bit_Ray","Code_trapper",0]
+    weapons = [ "pixel_l", "glitch_impact", "code_trapper", "Bit_Ray", "duplicator"]
     
     if scene == "menu":
         pyxel.blt(0,0,2,0,0,256,256)
@@ -522,12 +527,24 @@ def draw():
     if dialogueBox == 1:
         dialogue("project x", "vous etes un resitant carré qui se bat contre les envaisseurs cercles. au fur de votre aventure voud débloquerais des armes et armure. utiliser ZQSD pour ce déplacer")
     if dialogueBox == 2:
-        dialogue("Nouveau", "vous avez deploquer le lance pixel. Apuyer sur le clique gauche de la souris pour tirrer", [0,0], pixelLuncher)
+        dialogue("Nouveau", "vous avez deploquer le lance pixel. Appuyer sur le clique gauche de la souris pour tirrer", [0,0], pixelLuncher)
     if dialogueBox == 3:
-        dialogue("Evolution", "votre lance pixel a evolue", [0,0], pixelLuncher)
-    if dialogueBox == 0:
-        pass
-    
+        dialogue("Nouveau", "Vous avez debloquer le glitch impact. Appuyer sur le clique droit de la souris pour declancher l'explotion", [20,0], glitchImpact)
+    if dialogueBox == 4:
+        dialogue("Evolution", "Votre lance pixel a evolue", [0,0], pixelLuncher)
+    if dialogueBox == 5:
+        dialogue("Nouveau", "Vous avez debloqué le code trapper. Appuyer sur espace pour poser un piège", [40,0], codeTraper)
+    if dialogueBox == 6:
+        dialogue("Evolution", "Votre glitch impact a évolue", [20,0], glitchImpact)
+    if dialogueBox == 7:
+        dialogue("Nouveau", "Vous avez debloquer le bitRay, rester appuyer pour envoyer un deluge de balle", [60,0], bitRay)
+    if dialogueBox == 8:
+        dialogue("Evolution", "Votre code trapper a evolue", [40,0], codeTraper)
+    if dialogueBox == 9:
+        dialogue("Nouveau", "Vous avez debloquer le duplicator. Appuyer sur espace pour lancer un clone de vous dans votre direction", [80,0], {"damage":"point de vie", "relaodTime":30})
+    if dialogueBox == 10:
+        dialogue("Evolution", "Votre bit ray a evoluer", [60,0], bitRay)
+
     if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
         pyxel.rect(pyxel.mouse_x, pyxel.mouse_y, 5, 5, 8)
     else:
@@ -538,8 +555,8 @@ pyxel.init(screen_size[0], screen_size[1])
 
 #load all image
 pyxel.load(r".\resource.pyxres")
-pyxel.image(1).load(0 , 0 ,r".\room.png")
-pyxel.image(2).load(0 , 0 ,r".\menu.png")
+pyxel.image(1).load(0 , 0 ,".\\room.png")
+pyxel.image(2).load(0 , 0 ,".\\menu.png")
 
 
 # Lancement du jeu
