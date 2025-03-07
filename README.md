@@ -9,4 +9,4 @@ Ce jeu est réalisé dans le cadre d’un devoir de NSI de 1er.
 
 Histoire du jeu :  
 
-	Le joueur prend le rôle du chef de la résistance dans le pays carré. Ce pays a été envahi par le royaume cercle son rival depuis toujours. Cela va faire 50 ans que le pays carré est sous la tyrannie des cercles et il vous incombe de transmettre un message d’espoir à tous les soumis : “ l’espoir est là devant vous, je me débarrasserai de l‘invasion cercle ”.  
+le joueur prend le rôle du chef de la résistance dans le pays carré. Ce pays a été envahi par le royaume cercle son rival depuis toujours. Cela va faire 50 ans que le pays carré est sous la tyrannie des cercles et il vous incombe de transmettre un message d’espoir à tous les soumis : “ l’espoir est là devant vous, je me débarrasserai de l‘invasion cercle ”.  
