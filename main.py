@@ -597,27 +597,27 @@ def draw():
     
     #draw the dialogue box for all the situation because of dialogueBox var
     if dialogueBox == 1:
-        dialogue("project x", "vous etes un resitant carré qui se bat contre les envaisseurs cercles. au fur de votre aventure voud débloquerais des armes et armure. utiliser ZQSD pour ce déplacer. Information : la taille des enemies correspond a ses point de vie.")
+        dialogue("project x", "vous etes un resitant carré qui se bat contre les envahisseurs cercles. au fur et à mesure de votre aventure voud débloquerez des armes et des armures. Utiliser les touches ZQSD pour se déplacer. Information : la taille des ennemies depend de ses points de vie.")
     if dialogueBox == 2:
-        dialogue("Nouveau", "vous avez deploquer le lance pixel. Appuyer sur le clique gauche de la souris pour tirrer", [0,0], pixelLuncher)
+        dialogue("Nouveau", "vous avez deploque le lance pixel. Appuyez sur le clique gauche de la souris pour tirer", [0,0], pixelLuncher)
     if dialogueBox == 3:
-        dialogue("Nouveau", "Vous avez debloquer le glitch impact. Appuyer sur le clique droit de la souris pour declancher l'explotion", [20,0], glitchImpact)
+        dialogue("Nouveau", "Vous avez debloque le glitch impact. Appuyez sur le clique gauche de la souris pour declancher l'explotion", [20,0], glitchImpact)
     if dialogueBox == 4:
         dialogue("Evolution", "Votre lance pixel a evolue", [0,0], pixelLuncher)
     if dialogueBox == 5:
-        dialogue("Nouveau", "Vous avez debloqué le code trapper. Appuyer sur espace pour poser un piège", [40,0], codeTraper)
+        dialogue("Nouveau", "Vous avez debloque le code trapper. Appuyez sur espace pour poser un piège", [40,0], codeTraper)
     if dialogueBox == 6:
         dialogue("Evolution", "Votre glitch impact a évolue", [20,0], glitchImpact)
     if dialogueBox == 7:
-        dialogue("Nouveau", "Vous avez debloquer le bitRay, rester appuyer pour envoyer un deluge de balle", [60,0], bitRay)
+        dialogue("Nouveau", "Vous avez debloque le bitRay, restez appuye pour envoyer un deluge de balle", [60,0], bitRay)
     if dialogueBox == 8:
         dialogue("Evolution", "Votre code trapper a evolue", [40,0], codeTraper)
     if dialogueBox == 9:
-        dialogue("Nouveau", "Vous avez debloquer le duplicator. Appuyer sur espace pour lancer un clone de vous dans votre direction", [80,0], {"damage":"point de vie", "relaodTime":30})
+        dialogue("Nouveau", "Vous avez debloque le duplicator. Appuyez sur espace pour lancer un clone de vous dans votre direction", [80,0], {"damage":"point de vie", "relaodTime":30})
     if dialogueBox == 10:
-        dialogue("Evolution", "Votre bit ray a evoluer", [60,0], bitRay)
+        dialogue("Evolution", "Votre bit ray a evolue", [60,0], bitRay)
     if dialogueBox == 11:
-        dialogue("Atention", "Le roi des cercle est aparue pour vous terrasser. Il possède 3000 point de vie. faite très atention a vous et bonne chance")
+        dialogue("Atention", "Le roi des cercle est aparue pour vous terrasser. Il possède 3000 points de vie. faites très attention a vous et bonne chance")
 
     #draw mouse cursor
     if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT): #mouse
